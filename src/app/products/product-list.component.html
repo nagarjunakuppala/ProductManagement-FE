@@ -1,0 +1,85 @@
+<div class='panel panel-primary'>
+	<div class='panel-heading'>
+	{{pageTitle}}	
+	</div>
+	<div class='panel-body'>
+		<div class='row'>
+			<div class='col-md-2'>Filter By:</div>
+			<div class='col-md-4'><input type='text' [(ngModel)] = 'filterText'/></div>
+		</div>	
+		<div class='row'>
+			<div class='col-md-6'><h3>Filtered By: {{filterText}}</h3></div>
+		</div>
+		<div class='table-responsive'>
+			<table class='table' *ngIf='products && products.length'>
+				<thead>
+					<tr>
+						<th><button class='btn btn-primary' (click)= 'toggleImage()'>{{showImage ? 'Hide' : 'Show'}} Image</button></th>
+						<th>Product</th>
+						<th>Code</th>
+						<th>Available</th>
+						<th>Price</th>
+						<th>5 Star Rating</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor='let product of filteredProducts'>
+						<td>
+							<img *ngIf='showImage'
+ 								 [src] = 'product.imageUrl'
+								[title] ='product.productName'
+								width = {{imageWidth}}
+								/>
+								
+						</td>
+						<td><a [routerLink]="['/products', product.productId]">{{product.productName }}</a> </td>
+						<td>{{product.productCode | convertToSpaces: '-'}}</td>
+						<td>{{product.releaseDate}}</td>
+						<td>{{product.price | currency:'INR':true}}</td>
+						<td><pm-star [rating] = 'product.starRating' (ratingClicked) ='onRatingClicked($event)'></pm-star></td>
+						<td><button type="button" name="button" class="btn btn-primary" (click) = "showEditForm(product)" [disabled] = "toggleEditForm">Edit</button></td>
+						<td><button type="button" name="button" class="btn btn-danger" (click)= "deleteProduct(product._id)">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+<form #frm = "ngForm" (ngSubmit) = "editProduct(frm)" *ngIf="toggleEditForm">
+	<div class="container">
+	<div class="form-group">
+		<label for="">Id:</label><input type="number" class="form-control" name="productId" value="" [ngModel]="selectedProduct.productId">
+	</div>
+	<div class="form-group">
+		<label for="">Product Name:</label>
+		<input type="text" class="form-control" name="productName" value="" [ngModel]="selectedProduct.productName"/>
+	</div>
+	<div class="form-group">
+		<label for="">Product Code:</label>
+		<input type="text" class="form-control" name="productCode" value="" [ngModel]="selectedProduct.productCode"/>
+	</div>
+	<div class="form-group">
+		<label for="">Release Date:</label>
+		<input type="text" class="form-control" name="releaseDate" value="" [ngModel]="selectedProduct.releaseDate"/>
+	</div>
+	<div class="form-group">
+		<label for="">Description:</label>
+		<input type="text" class="form-control" name="description" value="" [ngModel]="selectedProduct.description"/>
+	</div>
+	<div class="form-group">
+		<label for="">Price:</label>
+		<input type="number" class="form-control" name="price" value="" [ngModel]="selectedProduct.price"/>
+	</div>
+	<div class="form-group">
+		<label for="">Star Rating:</label>
+		<input type="number" class="form-control" name="starRating" value="" [ngModel]="selectedProduct.starRating"/>
+	</div>
+	<div class="form-group">
+		<label for="">Image URL:</label>
+		<input type="text" class="form-control" name="imageUrl" value="" [ngModel]="selectedProduct.imageUrl">
+	</div>
+	<button type="submit" name="button" class="btn btn-success">Save</button>
+	</div>
+</form>
+		
+		</div>
+	
+	</div>
+</div>
